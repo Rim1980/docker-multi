@@ -1,0 +1,26 @@
+sudo: required
+
+services:
+  - docker
+
+
+before_installed:
+  - docker build -t rim1980/react-test -f ./client/Dockerfile.dev ./client
+
+scripts:
+  - docker run rim1980/react-test npm test -- --coverage
+after_success:
+  - docker build -t rim1980/multi-client ./client
+  - docker build -t rim1980/multi-nginx ./nginx
+  - docker build -t rim1980/multi-server ./server
+  - docker build -t rim1980/multi-worker ./worker
+# Log in to the docker CLI
+  - echo "$DOCKER_PASS" | docker login -u "$DOCKER_ID"  --password-stdin
+
+# Take the images and  push them to docker hub
+
+  - docker push rim1980/multi-client 
+  - docker push rim1980/multi-nginx 
+  - docker push rim1980/multi-server 
+  - docker push rim1980/multi-worker 
+
