@@ -8,7 +8,7 @@ before_installed:
   - docker build -t rim1980/react-test -f ./client/Dockerfile.dev ./client
 
 scripts:
-  - docker run rim1980/react-test npm test -- --coverage
+  - docker run rim1980/react-test
 after_success:
   - docker build -t rim1980/multi-client ./client
   - docker build -t rim1980/multi-nginx ./nginx
